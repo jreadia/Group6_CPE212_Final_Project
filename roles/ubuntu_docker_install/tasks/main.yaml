@@ -1,0 +1,36 @@
+---
+- name: PREREQUISITE PACKGES (Ubuntu)
+  ansible.builtin.apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - software-properties-common
+    state: present
+
+- name: DOCKER'S OFFICIAL GPG KEY (Ubuntu)
+  ansible.builtin.apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: DOCKER REPOSITORY (Ubuntu)
+  ansible.builtin.apt_repository:
+    repo: "deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+    state: present
+
+- name: DOCKER ENGINE (Ubuntu)
+  ansible.builtin.apt:
+    name: docker-ce
+    state: present
+    update_cache: yes
+
+- name: DOCKER SDK FOR PYTHON (Ubuntu)
+  ansible.builtin.apt:
+    name: python3-docker
+    state: present
+
+- name: START AND ENABLE DOCKER ON BOOT (Ubuntu)
+  ansible.builtin.service:
+    name: docker
+    state: started
+    enabled: yes

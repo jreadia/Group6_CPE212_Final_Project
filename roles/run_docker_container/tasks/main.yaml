@@ -1,0 +1,4 @@
+---
+- name: Run Docker Container from built image (Ubuntu and CentOS)
+  ansible.builtin.command:
+    cmd: docker run -d -p 80:80 --name group6_website_container group6_website_image

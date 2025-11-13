@@ -1,0 +1,29 @@
+---
+- hosts: all
+  become: true
+  pre_tasks:
+    - name: Update apt cache (Ubuntu)
+      apt:
+        update_cache: yes
+      when: ansible_distribution == "Ubuntu"
+
+    - name: Update yum cache (CentOS)
+      yum:
+        update_cache: yes
+      when: ansible_distribution == "CentOS"
+
+- hosts: ubuntu_server
+  become: true
+  roles:
+    - ubuntu_docker_install
+
+- hosts: centos_server
+  become: true
+  roles:
+    - centos_docker_install
+
+- hosts: all
+  become: true
+  roles:
+    - build_docker_image
+    - run_docker_container

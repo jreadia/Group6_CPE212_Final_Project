@@ -1,0 +1,33 @@
+---
+- name: Checking for Docker Installation (Ubuntu and CentOS)
+  ansible.builtin.command:
+    cmd: docker --version
+
+- name: Checking if Docker is up (Ubuntu and CentOS)
+  ansible.builtin.command:
+    cmd: docker info
+
+- name: Creating the directory to store Dockerfile and HTML files (Ubuntu and CentOS)
+  become_user: "{{ ansible_user }}"
+  ansible.builtin.file:
+    path: /home/{{ ansible_user }}/group6_website
+    state: directory
+    mode: '0755'
+
+- name: Copy Dockerfile to remote hosts (Ubuntu and CentOS)
+  become_user: "{{ ansible_user }}"
+  ansible.builtin.copy:
+    src: Dockerfile
+    dest: /home/{{ ansible_user }}/group6_website/Dockerfile
+    mode: '0644'
+
+- name: Copy HTML file to remote hosts (Ubuntu and CentOS)
+  become_user: "{{ ansible_user }}"
+  ansible.builtin.copy:
+    src: index.html
+    dest: /home/{{ ansible_user }}/group6_website/index.html
+    mode: '0644'
+
+- name: Building Docker Image (Ubuntu and CentOS)
+  ansible.builtin.command:
+    cmd: docker build -t group6_website_image /home/{{ ansible_user }}/group6_website
