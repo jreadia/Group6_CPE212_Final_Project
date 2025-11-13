@@ -1,4 +1,14 @@
 ---
+- name: Stop existing Docker Container (Ubuntu and CentOS)
+  ansible.builtin.command:
+    cmd: docker stop group6_website_container
+
+- name: Remove existing Docker Container (Ubuntu and CentOS)
+  ansible.builtin.command:
+    cmd: docker rm group6_website_container
+
+# added the following tasks above in case I need to rerun the playbook
+
 - name: Run Docker Container from built image (Ubuntu and CentOS)
   ansible.builtin.command:
     cmd: docker run -d -p 80:80 --name group6_website_container group6_website_image
