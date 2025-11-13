@@ -1,11 +1,299 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sample</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Group Portfolio SysAd!</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;500&family=Playfair+Display:wght@700&family=Manrope:wght@700&family=Raleway:wght@400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-gradient: linear-gradient(125deg, #f7cac9 0%, #92a8d1 100%);
+  --bento: #fffefaee;
+  --bento-hover: #ede5fd;
+  --primary: #5221e6;
+  --accent: #ff87a3;
+  --radius: 1.5rem;
+  --shadow: 0 8px 24px rgba(82,33,230,0.14);
+}
+body {
+  min-height: 100vh;
+  background: var(--bg-gradient);
+  font-family: 'Montserrat', Arial, sans-serif;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  transition: background 0.7s;
+}
+.main-container {
+  max-width: 1020px;
+  width: 95vw;
+  margin: 40px auto;
+}
+.hero-title {
+  font-family: 'Manrope', sans-serif;
+  font-size: 2.7rem;
+  letter-spacing: -1.8px;
+  margin: 0 0 .2em 0;
+  background: linear-gradient(90deg,#ff87a3,#5221e6 70%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-align: center;
+  font-weight: 700;
+}
+.hero-desc {
+  font-family: 'Raleway', sans-serif;
+  color: #413b5b;
+  max-width: 600px;
+  font-size: 1.18rem;
+  text-align: center;
+  margin: 0 auto 2em auto;
+  opacity: 0.92;
+}
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  margin-bottom: 2em;
+}
+.member-card {
+  background: var(--bento);
+  border-radius: var(--radius);
+  padding: 2.3em 1.6em 1.5em 1.6em;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  cursor: pointer;
+  position: relative;
+  border: 2.5px solid transparent;
+  transition: background 0.22s, border-color 0.19s, transform 0.14s;
+  will-change: transform;
+  outline: none;
+  animation: fadeInCard .76s cubic-bezier(.41,1.61,.6,1.05);
+}
+.member-card:focus, .member-card:hover {
+  background: var(--bento-hover);
+  border-color: var(--accent);
+  transform: translateY(-8px) scale(1.01);
+  z-index: 2;
+}
+.card-dot {
+  position: absolute;
+  top: 18px;
+  right: 23px;
+  height: 17px;
+  width: 17px;
+  background: radial-gradient(circle,#ff87a3 60%,#5221e6 110%);
+  border-radius: 50%;
+  box-shadow: 0 2px 7px #f7b2d989;
+  z-index: 3;
+}
+.member-name {
+  color: var(--primary);
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 4px;
+  letter-spacing: .1px;
+}
+.member-role {
+  font-size: .96rem;
+  color: #bb60b5;
+  margin-bottom: 12px;
+  letter-spacing: .2px;
+}
+.member-action-btn {
+  padding: .74em 1.25em;
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 1em;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  margin: 7px 8px 0 0;
+  transition: background 0.15s, box-shadow 0.16s, transform 0.14s;
+  box-shadow: 0 3px 14px #5221e62f;
+  outline: none;
+  display: inline-block;
+}
+.member-action-btn:hover, .member-action-btn:focus {
+  background: var(--accent);
+  color: #230934;
+  box-shadow: 0 3px 17px #ff87a349;
+  transform: scale(1.045);
+}
+@media (max-width:700px) {
+  .main-container { padding: 2vw; }
+  .hero-title { font-size: 1.5rem; }
+  .bento-grid { gap: 18px; }
+}
+@keyframes fadeInCard {
+  from { opacity: 0; transform: scale(0.96) translateY(30px); }
+  to { opacity:1; transform: scale(1) translateY(0); }
+}
+#modalOverlay {
+  display:none; position:fixed; left:0; top:0; width:100vw; height:100vh;
+  background:rgba(35,18,56,0.29); z-index:30; backdrop-filter:blur(3px);
+  align-items:center; justify-content:center;
+  animation: fadeIn .4s cubic-bezier(.5,1.66,.94,.99);
+}
+#modalOverlay.active { display:flex; }
+#modalDialog {
+  background:#fffefa;
+  border-radius: 1.2em;
+  box-shadow: 0 24px 46px #5221e638,0 2px 12px #ffb2d921;
+  padding: 2.2em 2em 1.7em 2em;
+  min-width:270px;
+  width: min(86vw, 370px);
+  outline:none;
+  position:relative;
+}
+#modalCloseBtn {
+  position:absolute; top: 1.1em; right: 1.1em; font-size: 1.35em;
+  background:none; border:none; color:#bb60b5; cursor:pointer;
+  padding: .1em .6em; border-radius: .9em; transition:background .14s;
+}
+#modalCloseBtn:hover { background:#fde1f4b4; }
+</style>
 </head>
 <body>
-    
+<div class="main-container">
+  <div class="hero-title">Welcome to our Portfolio!</div>
+  <div class="hero-desc">
+    Hello! Welcome to our Portfolio! <br>
+    As you can see each member has their own profile <br>
+    To access or explore the members work, simply click on their respective cards below! <br>
+  </div>
+  <section class="bento-grid">
+    <div class="member-card" tabindex="0" aria-label="Explore James Russel" onclick="showModal('James')" onkeydown="return handleEnter(event,'James')">
+      <span class="card-dot"></span>
+      <div class="member-name">Adia, James Russel</div>
+      <div class="member-role">Project Lead</div>
+      <button class="member-action-btn" onclick="showModal('James', event)">View Profile</button>
+    </div>
+    <div class="member-card" tabindex="0" aria-label="Explore Jesther John" onclick="showModal('Jesther')" onkeydown="return handleEnter(event,'Jesther')">
+      <span class="card-dot"></span>
+      <div class="member-name">Carbonera, Jesther John</div>
+      <div class="member-role">Website</div>
+      <button class="member-action-btn" onclick="showModal('Jesther', event)">View Profile</button>
+    </div>
+    <div class="member-card" tabindex="0" aria-label="Explore Kyla Andrea" onclick="showModal('Kyla')" onkeydown="return handleEnter(event,'Kyla')">
+      <span class="card-dot"></span>
+      <div class="member-name">Lacorte, Kyla Andrea</div>
+      <div class="member-role">Playbook & Docs</div>
+      <button class="member-action-btn" onclick="showModal('Kyla', event)">View Profile</button>
+    </div>
+    <div class="member-card" tabindex="0" aria-label="Explore Renmar Keir" onclick="showModal('Renmar')" onkeydown="return handleEnter(event,'Renmar')">
+      <span class="card-dot"></span>
+      <div class="member-name">Virtudez, Renmar Keir</div>
+      <div class="member-role">Playbook & Docs</div>
+      <button class="member-action-btn" onclick="showModal('Renmar', event)">View Profile</button>
+    </div>
+  </section>
+</div>
+<!-- Modal -->
+<div id="modalOverlay">
+  <div id="modalDialog" tabindex="-1">
+    <button id="modalCloseBtn" onclick="closeModal()" aria-label="Close profile">&#10006;</button>
+    <div id="modalContent" style="text-align:center; margin-top:10px;"></div>
+  </div>
+</div>
+<script>
+const members = {
+  James: {
+    name: "Adia, James Russel",
+    role: "Project Lead",
+    resources: [
+      { text: "Prelim HOA", href: "https://drive.google.com/drive/folders/1aYrsAl0feM0ifNLV_JzBuBQxSKAj8r9q?usp=drive_link" },
+      { text: "Midterm HOA", href: "https://drive.google.com/drive/folders/1KMvpkF9honxgtAXMmc-y7Wp6SAAEktza?usp=drive_link" },
+      { text: "Finals HOA", href: "https://drive.google.com/drive/folders/1psLCl2kEq4ChnvFbTn5FB3pmDU1YB9sZ?usp=drive_link" },
+      { text: "Prelim Exams", href: "https://github.com/jreadia/Adia_PrelimExam" },
+      { text: "Midterm Exams", href: "https://github.com/jreadia/CPE_MIDEXAM_ADIA"},
+      { text: "Final Exams", href: "#notyet" },
+      { text: "Learnings & Reflection", href: "https://drive.google.com/file/d/1tPhZhVWBR_SzCUPQzLY81HEVyoXLoIoT/view?usp=sharing" }
+    ]
+  },
+  Jesther: {
+    name: "Carbonera, Jesther John",
+    role: "Design & Docs",
+    resources: [
+      { text: "Prelim HOA", href: "https://drive.google.com/drive/folders/1oCDTMZWkufeL7LVm-2P7P7m9wMRnxYU-?usp=drive_link" },
+      { text: "Midterm HOA", href: "https://drive.google.com/drive/folders/177tDjy_RxhFBnG0U3CBtU2njm7hKHpBQ?usp=drive_link" },
+      { text: "Finals HOA", href: "https://drive.google.com/drive/folders/1K2iAvEtsnmJhTEnF54jQAoEZUif5T4LK?usp=drive_link" },
+      { text: "Prelim Exam", href: "https://github.com/JestherCarbonera/Carbonera_PrelimExam" },
+      { text: "Midterm Exam", href: "https://github.com/JestherCarbonera/CPE212_MidtermExam"},
+      { text: "Final Exam", href: "#notyet" },
+      { text: "Learnings & Reflection", href: "#notyet" }
+    ]
+  },
+  Kyla: {
+    name: "Lacorte, Kyla Andrea",
+    role: "Development",
+    resources: [
+      { text: "Prelim HOA", href: "https://drive.google.com/drive/folders/1kGTDzqs2LwPychLr9X-tLlrLL2fS4sbs?usp=drive_link" },
+      { text: "Midterm HOA", href: "https://drive.google.com/drive/folders/1cW95GzMtuWdPEJaxHMPwT-zMRG2NKHmV?usp=drive_link" },
+      { text: "Finals HOA", href: "https://drive.google.com/drive/folders/1TwoUSiFUt_pauVmFK86wl0NW9KOTatvs?usp=drive_link" },
+      { text: "Prelim Exam", href: "https://github.com/KYLIDRE" },
+      { text: "Midterm Exam", href: "https://github.com/juichigatsu" },
+      { text: "Final Exam", href: "#notyet" },
+      { text: "Learnings & Reflection", href: "#notyet" }
+    ]
+  },
+  Renmar: {
+    name: "Virtudez, Renmar Keir",
+    role: "QA & Docs",
+    resources: [
+      { text: "Prelim HOA", href: "https://drive.google.com/drive/folders/1Hfq9fPA5JsxKKILfLzVq3_kk3zoDz8cf?usp=drive_link" },
+      { text: "Midterm HOA", href: "https://drive.google.com/drive/folders/1W30X0k4KibEthtCN8MDOUiUgvMxSDr2f?usp=drive_link" },
+      { text: "Finals HOA", href: "https://drive.google.com/drive/folders/1gzzgzyKS6bpW-o5z5LuhpZjJJdHCI-Lp?usp=drive_link" },
+      { text: "Prelim Exams", href: "https://github.com/rkVirtudez" },
+      { text: "Midterm Exams", href: "https://github.com/rkVirtudez"},
+      { text: "Final Exams", href: "#notyet" },
+      { text: "Learnings & Reflection", href: "#notyet" }
+    ]
+  }
+};
+
+function showModal(key, evt) {
+  if (evt) evt.stopPropagation();
+  const m = members[key];
+  if (!m) return;
+  let links = m.resources.map(r => {
+    if (r.href === "#notyet") {
+      return `<button class="member-action-btn" onclick="showNotYetMsg(event)">${r.text}</button>`;
+    }
+    return `<a href="${r.href}" class="member-action-btn"${r.href.startsWith('http') ? ' target="_blank"' : ''}>${r.text}</a>`;
+  }).join('');
+  document.getElementById('modalContent').innerHTML = `
+    <div style="font-family:'Manrope',sans-serif;font-size:1.3rem;color:#ff87a3;font-weight:700;margin-bottom:0.4em;">${m.name}</div>
+    <div style="color:#5221e6;font-size:1rem;margin-bottom:1.1em;">${m.role}</div>
+    <div style="margin-bottom:1.0em;">${links}</div>
+  `;
+  document.getElementById('modalOverlay').classList.add('active');
+  setTimeout(()=>document.getElementById('modalDialog').focus(),100);
+}
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('active');
+}
+function handleEnter(e, key) {
+  if (e.key === " " || e.key === "Enter") {
+    showModal(key);
+    return false;
+  }
+}
+document.addEventListener('keydown',function(e) {
+  if (e.key ==="Escape") closeModal();
+});
+document.getElementById('modalOverlay').addEventListener('click',function(e) {
+  if (e.target ===this) closeModal();
+});
+function showNotYetMsg(e) {
+  e.stopPropagation();
+  alert("This resource does not exist yet.");
+}
+</script>
 </body>
 </html>
